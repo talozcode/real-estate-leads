@@ -31,19 +31,17 @@ export const SHEET_HEADERS = [
  * never sent to the browser.
  */
 function getSheetsClient() {
-  if (!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
+  if (!process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
     throw new Error(
-      "Missing Google credentials. Make sure GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_PRIVATE_KEY are set in .env.local"
+      "Missing GOOGLE_SERVICE_ACCOUNT_JSON environment variable."
     );
   }
 
+  // Parse the entire service account JSON stored as one env var
+  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+
   const auth = new google.auth.GoogleAuth({
-    credentials: {
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      // The private key is stored with literal \n characters in the env var.
-      // We replace them with real newlines so the key is valid.
-      private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-    },
+    credentials,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
 
