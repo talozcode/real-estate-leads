@@ -37,7 +37,7 @@ export default function AdminPage() {
   useEffect(() => {
     async function fetchLeads() {
       try {
-        const res = await fetch("/api/leads");
+        const res = await fetch("/api/leads", { cache: "no-store" });
         if (!res.ok) throw new Error("Failed to load leads.");
         const data = await res.json();
         // Skip the first row — it's the header row from the sheet

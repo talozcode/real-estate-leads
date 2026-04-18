@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { getLeadsFromSheet } from "@/lib/google-sheets";
 
+// Tell Next.js/Vercel never to cache this route — always fetch fresh from Sheets
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/leads
  * Returns all rows from the Google Sheet as a 2D array.
