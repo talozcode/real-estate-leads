@@ -55,10 +55,10 @@ export async function POST(request: NextRequest) {
     await appendLeadToSheet(lead);
     return NextResponse.json({ success: true, leadId: lead.id }, { status: 200 });
   } catch (err) {
-    // Log the full error server-side but only send a safe message to the client
-    console.error("[/api/submit] Google Sheets error:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[/api/submit] Google Sheets error:", message);
     return NextResponse.json(
-      { error: "We could not save your information. Please try again or contact the office." },
+      { error: `Save failed: ${message}` },
       { status: 500 }
     );
   }
